@@ -1,0 +1,373 @@
+<meta charset="utf-8">
+<title>Coastal Air Plus Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: filter bar → KPI strip → two charts side by side (stack on phone) → channel table → campaign table */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --ink: #11161c; --ink-2: #4a525c; --muted: #7d858f;
+  --grid: #e3e6ea; --axis: #c3c8ce; --ring: rgba(17,22,28,.10); --wash: rgba(17,22,28,.05);
+  --accent: #1b5fa8; --accent-ink: #ffffff;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #8a8f96;
+  --spend: #eb6834; --rev: #2a78d6;
+  --good: #0a7a3d; --bad: #c0362c;
+  --f-ui: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-num: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1114; --surface: #171b20; --ink: #f2f4f6; --ink-2: #c1c7ce; --muted: #8b939c;
+  --grid: #262c33; --axis: #3a414a; --ring: rgba(255,255,255,.10); --wash: rgba(255,255,255,.06);
+  --accent: #5b9be6; --accent-ink: #0e1114;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #7a8088;
+  --spend: #d95926; --rev: #3987e5; --good: #3ccf7c; --bad: #f07067; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e1114; --surface: #171b20; --ink: #f2f4f6; --ink-2: #c1c7ce; --muted: #8b939c;
+  --grid: #262c33; --axis: #3a414a; --ring: rgba(255,255,255,.10); --wash: rgba(255,255,255,.06);
+  --accent: #5b9be6; --accent-ink: #0e1114;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #7a8088;
+  --spend: #d95926; --rev: #3987e5; --good: #3ccf7c; --bad: #f07067; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-ui); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 20px; }
+header.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; }
+h1 { font-size: 1.6rem; font-weight: 700; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-size: 1rem; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--ink-2); margin: 4px 0 0; }
+.stamp { color: var(--muted); font-size: 12px; }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
+
+/* filters */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; background: var(--surface);
+  border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; }
+.filters label.lab { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+select { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--ring); border-radius: 7px; padding: 6px 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.chip { font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--ring);
+  background: var(--surface); color: var(--ink); border-radius: 999px; padding: 4px 10px 4px 8px; cursor: pointer; }
+.chip[aria-pressed="false"] { color: var(--muted); background: transparent; }
+.chip[aria-pressed="false"] .sw { background: transparent !important; outline: 1.5px solid var(--axis); outline-offset: -1.5px; }
+.chip:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.preset { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--accent); cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.preset:hover { background: var(--wash); }
+.sw { width: 10px; height: 10px; border-radius: 3px; flex: none; display: inline-block; }
+
+/* KPIs */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--ring);
+  border: 1px solid var(--ring); border-radius: 10px; overflow: hidden; }
+.kpi { background: var(--surface); padding: 14px 16px; min-width: 0; }
+.kpi .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.kpi .v { font-family: var(--f-num); font-size: 1.55rem; font-weight: 500; margin-top: 4px; letter-spacing: -.02em; }
+.kpi .n { color: var(--ink-2); font-size: 12px; margin-top: 2px; }
+.kpi.paid .k::after { content: "Paid media"; margin-left: 6px; font-size: 10px; letter-spacing: .04em; color: var(--accent);
+  border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; text-transform: none; }
+
+/* cards */
+.grid2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 16px; position: relative; min-width: 0; display: grid; gap: 10px; }
+.card-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.note { color: var(--muted); font-size: 12px; margin: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--f-ui); }
+.tick { fill: var(--muted); font-size: 11px; font-family: var(--f-num) !important; }
+.mlbl { fill: var(--ink-2); font-size: 11.5px; }
+.tot { fill: var(--ink); font-size: 11px; font-weight: 600; font-family: var(--f-num) !important; }
+.hit { fill: transparent; cursor: crosshair; }
+.hit:hover { fill: var(--wash); }
+.tip { position: absolute; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--ring);
+  box-shadow: 0 6px 20px rgba(0,0,0,.14); border-radius: 8px; padding: 9px 11px; font-size: 12px; line-height: 1.55; z-index: 4; min-width: 190px; }
+.tip b { display: block; margin-bottom: 3px; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; }
+.tip .row span:first-child { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.tip .row span:last-child { font-family: var(--f-num); }
+.tip .row.sum { border-top: 1px solid var(--grid); margin-top: 3px; padding-top: 3px; font-weight: 600; }
+
+/* tables */
+.tbl { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td { font-family: var(--f-num); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+th:first-child, td:first-child { text-align: left; font-family: var(--f-ui); font-size: 13px; }
+td.name { white-space: normal; min-width: 220px; max-width: 380px; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--surface); }
+th.sort { cursor: pointer; user-select: none; }
+th.sort[aria-sort]::after { content: " ↓"; color: var(--accent); }
+th.sort[aria-sort="ascending"]::after { content: " ↑"; }
+tfoot td { font-weight: 600; border-bottom: 0; }
+tbody tr:hover { background: var(--wash); }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-ui); font-size: 11.5px; color: var(--ink-2); }
+.roas-good { color: var(--good); } .roas-bad { color: var(--bad); }
+.dim { color: var(--muted); }
+.tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+input[type=search] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--ring); border-radius: 7px; padding: 6px 10px; width: min(260px, 100%); }
+.more { font: inherit; font-size: 13px; color: var(--accent); background: transparent; border: 1px solid var(--ring); border-radius: 7px; padding: 6px 12px; cursor: pointer; justify-self: start; }
+.err { color: var(--bad); }
+@media (prefers-reduced-motion: no-preference) { rect.bar { transition: opacity .15s; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Coastal Air Plus marketing</h1>
+      <p class="sub">Every lead source in SearchLight: paid ads, Google Business Profile, organic, phone, email/SMS and more.</p>
+    </div>
+    <div class="stamp" id="stamp">Loading data…</div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filters">
+    <label class="lab" for="period">Period</label>
+    <select id="period"></select>
+    <label class="lab" id="chLab">Channels</label>
+    <div class="chips" id="chips" aria-labelledby="chLab"></div>
+    <button class="preset" type="button" id="pAll">All</button>
+    <button class="preset" type="button" id="pPaid">Paid only</button>
+    <button class="preset" type="button" id="pPD">Purely Digital (Google + Facebook)</button>
+  </div>
+
+  <section class="kpis" id="kpis" aria-live="polite"></section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><h2>Leads by month and channel</h2><span class="note" id="leadNote"></span></div>
+      <div class="legend" id="leadLegend"></div>
+      <svg id="leadChart" viewBox="0 0 640 300" role="img" aria-label="Stacked bar chart of leads per month by channel"></svg>
+      <div class="tip" hidden></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><h2>Paid media: spend vs closed revenue</h2></div>
+      <div class="legend"><span><i class="sw" style="background:var(--spend)"></i>Ad spend</span><span><i class="sw" style="background:var(--rev)"></i>Closed revenue</span></div>
+      <svg id="paidChart" viewBox="0 0 480 300" role="img" aria-label="Grouped bar chart of paid media spend and closed revenue per month"></svg>
+      <div class="tip" hidden></div>
+      <p class="note" id="paidNote"></p>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-h"><h2>Channels</h2><span class="note" id="chNote"></span></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Channel</th><th>Leads</th><th>% of leads</th><th>Booked jobs</th><th>Closed revenue</th><th>Spend</th><th>Cost / lead</th><th>ROAS</th></tr></thead>
+      <tbody id="chRows"></tbody><tfoot id="chFoot"></tfoot>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><h2>Campaigns</h2>
+      <div class="tools"><input type="search" id="q" placeholder="Search campaigns" aria-label="Search campaigns"></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr>
+        <th class="sort" data-k="c">Campaign</th><th class="sort" data-k="ch">Channel</th><th class="sort" data-k="leads" aria-sort="descending">Leads</th>
+        <th class="sort" data-k="bookedCustomers">Booked</th><th class="sort" data-k="closedRevenue">Closed revenue</th><th class="sort" data-k="spend">Spend</th>
+        <th class="sort" data-k="cpl">Cost / lead</th><th class="sort" data-k="roas">ROAS</th></tr></thead>
+      <tbody id="cRows"></tbody>
+    </table></div>
+    <button class="more" type="button" id="more">Show all campaigns</button>
+  </section>
+
+  <p class="note">Source: SearchLight API, account coastal-air-plus. Leads are unique leads attributed to each campaign. Closed revenue is attributed to the lead's original campaign, so recent months keep growing as jobs close. ROAS = closed revenue ÷ spend, shown only where spend is recorded. Facebook Ads leads appear in SearchLight with no spend attached. “Unattributed spend” is ad spend SearchLight could not tie to a campaign; it is counted in paid spend totals.</p>
+</div>
+
+<script>
+const fmtN = n => Math.round(n).toLocaleString("en-US");
+const fmt$ = n => "$" + Math.round(n).toLocaleString("en-US");
+const fmtK = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(2) + "M" : n >= 1e4 ? "$" + Math.round(n / 1e3) + "K" : n >= 1e3 ? "$" + (n / 1e3).toFixed(1) + "K" : "$" + Math.round(n);
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const mShort = m => MON[+m.slice(5) - 1], mLong = m => MONL[+m.slice(5) - 1] + " " + m.slice(0, 4);
+const NS = "http://www.w3.org/2000/svg";
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+let D, COLOR = {}, sel = new Set(), period = "ytd", sortK = "leads", sortDir = -1, showAll = false;
+
+fetch("data.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(init).catch(e => {
+  document.getElementById("stamp").innerHTML = `<span class="err">Could not load data.json (${e.message}). Republish the dashboard with its data file.</span>`;
+});
+
+function init(data) {
+  D = data;
+  D.channels.forEach((c, i) => COLOR[c] = `var(--s${i + 1})`);
+  const last = D.months[D.months.length - 1];
+  document.getElementById("stamp").textContent = `${mLong(D.months[0])} – ${mLong(last)} · updated ${new Date(D.updated + "T12:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+  const ps = document.getElementById("period");
+  ps.innerHTML = `<option value="ytd">Year to date</option>` + D.months.slice().reverse().map(m => `<option value="${m}">${mLong(m)}</option>`).join("");
+  let saved = null; try { saved = JSON.parse(store.get("cap-sel") || "null"); } catch (e) {}
+  sel = new Set(Array.isArray(saved) && saved.length ? saved.filter(c => D.channels.includes(c)) : D.channels);
+  const sp = store.get("cap-period"); if (sp && (sp === "ytd" || D.months.includes(sp))) period = sp;
+  ps.value = period;
+  ps.addEventListener("change", () => { period = ps.value; store.set("cap-period", period); render(); });
+  document.getElementById("chips").innerHTML = D.channels.map(c => `<button type="button" class="chip" data-c="${c}"><i class="sw" style="background:${COLOR[c]}"></i>${c}</button>`).join("");
+  document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+    const c = b.dataset.c; sel.has(c) ? sel.delete(c) : sel.add(c); if (!sel.size) sel.add(c); save(); render(); }));
+  document.getElementById("pAll").onclick = () => { sel = new Set(D.channels); save(); render(); };
+  document.getElementById("pPaid").onclick = () => { sel = new Set(D.paid); save(); render(); };
+  document.getElementById("pPD").onclick = () => { sel = new Set(["Google Ads", "Facebook Ads"]); save(); render(); };
+  document.getElementById("q").addEventListener("input", renderCampaigns);
+  document.getElementById("more").onclick = () => { showAll = !showAll; renderCampaigns(); };
+  document.querySelectorAll("th.sort").forEach(th => th.addEventListener("click", () => {
+    const k = th.dataset.k; if (sortK === k) sortDir *= -1; else { sortK = k; sortDir = (k === "c" || k === "ch") ? 1 : -1; }
+    document.querySelectorAll("th.sort").forEach(t => t.removeAttribute("aria-sort"));
+    th.setAttribute("aria-sort", sortDir === 1 ? "ascending" : "descending"); renderCampaigns(); }));
+  render();
+}
+const save = () => store.set("cap-sel", JSON.stringify([...sel]));
+const inPeriod = m => period === "ytd" || m === period;
+const paidSel = () => D.paid.filter(c => sel.has(c));
+const unattr = m => (paidSel().some(c => c === "Google Ads") ? (D.unattributedSpend[m] || 0) : 0);
+
+function sum(rows) {
+  const s = { leads: 0, spend: 0, bookedCustomers: 0, closedRevenue: 0, soldRevenue: 0 };
+  rows.forEach(r => { for (const k in s) s[k] += r[k] || 0; }); return s;
+}
+
+function render() {
+  document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", sel.has(b.dataset.c)));
+  renderKpis(); renderLeadChart(); renderPaidChart(); renderChannels(); renderCampaigns();
+}
+
+function renderKpis() {
+  const rows = D.rows.filter(r => inPeriod(r.m) && sel.has(r.ch));
+  const all = sum(rows);
+  const paidRows = rows.filter(r => D.paid.includes(r.ch));
+  const p = sum(paidRows);
+  const ua = D.months.filter(inPeriod).reduce((a, m) => a + unattr(m), 0);
+  const spend = p.spend + ua;
+  const hasPaid = paidSel().length > 0;
+  const lbl = period === "ytd" ? "Year to date" : mLong(period);
+  const bookRate = all.leads ? all.bookedCustomers / all.leads : 0;
+  document.getElementById("kpis").innerHTML = `
+    <div class="kpi"><div class="k">Leads</div><div class="v">${fmtN(all.leads)}</div><div class="n">${lbl} · ${sel.size === D.channels.length ? "all channels" : sel.size + " of " + D.channels.length + " channels"}</div></div>
+    <div class="kpi"><div class="k">Booked jobs</div><div class="v">${fmtN(all.bookedCustomers)}</div><div class="n">${(bookRate * 100).toFixed(0)} per 100 leads</div></div>
+    <div class="kpi"><div class="k">Closed revenue</div><div class="v">${fmtK(all.closedRevenue)}</div><div class="n">${fmt$(all.closedRevenue)}</div></div>
+    <div class="kpi paid"><div class="k">Ad spend</div><div class="v">${hasPaid ? fmtK(spend) : "–"}</div><div class="n">${hasPaid ? (ua ? fmt$(ua) + " unattributed" : "All tied to campaigns") : "No paid channel selected"}</div></div>
+    <div class="kpi paid"><div class="k">Cost / lead</div><div class="v">${hasPaid && p.leads ? fmt$(spend / p.leads) : "–"}</div><div class="n">${hasPaid ? fmtN(p.leads) + " paid leads" : "&nbsp;"}</div></div>
+    <div class="kpi paid"><div class="k">ROAS</div><div class="v">${hasPaid && spend ? (p.closedRevenue / spend).toFixed(2) + "x" : "–"}</div><div class="n">${hasPaid ? fmtK(p.closedRevenue) + " closed revenue" : "&nbsp;"}</div></div>`;
+}
+
+function niceMax(v, steps = 4) {
+  if (v <= 0) return { max: steps, step: 1 };
+  const raw = v / steps, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(x => x * mag).find(x => x >= raw);
+  return { max: step * Math.ceil(v / step), step };
+}
+function frame(svg, W, H, max, step, fmtTick, L = 44) {
+  const R = 8, T = 18, B = 26;
+  svg.innerHTML = "";
+  const el = (tag, a, txt) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
+  const y = v => T + (H - T - B) * (1 - v / max);
+  for (let t = 0; t <= max + 1e-9; t += step) {
+    el("line", { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: t ? "var(--grid)" : "var(--axis)", "stroke-width": 1 });
+    el("text", { x: L - 8, y: y(t) + 4, "text-anchor": "end", class: "tick" }, fmtTick(t));
+  }
+  return { el, y, L, R, T, B, W, H };
+}
+function tipper(svg) {
+  const card = svg.parentElement, tip = card.querySelector(".tip");
+  return {
+    show(html, cx, cy, W) {
+      tip.innerHTML = html; tip.hidden = false;
+      const r = svg.getBoundingClientRect(), cr = card.getBoundingClientRect(), s = r.width / W;
+      let left = r.left - cr.left + cx * s + 14;
+      if (left + tip.offsetWidth > cr.width - 6) left = r.left - cr.left + cx * s - tip.offsetWidth - 14;
+      tip.style.left = Math.max(6, left) + "px";
+      tip.style.top = Math.max(6, r.top - cr.top + cy * s) + "px";
+    },
+    hide() { tip.hidden = true; }
+  };
+}
+const topRounded = (x, y0, w, h, r) => { r = Math.max(0, Math.min(r, h, w / 2)); return `M${x},${y0 + h} V${y0 + r} Q${x},${y0} ${x + r},${y0} H${x + w - r} Q${x + w},${y0} ${x + w},${y0 + r} V${y0 + h} Z`; };
+
+function renderLeadChart() {
+  const svg = document.getElementById("leadChart"), W = 640, H = 300;
+  const chs = D.channels.filter(c => sel.has(c));
+  const by = D.months.map(m => { const o = { m }; chs.forEach(c => o[c] = 0); D.rows.forEach(r => { if (r.m === m && sel.has(r.ch)) o[r.ch] += r.leads; }); o.total = chs.reduce((a, c) => a + o[c], 0); return o; });
+  const { max, step } = niceMax(Math.max(...by.map(o => o.total)) * 1.06);
+  const f = frame(svg, W, H, max, step, fmtN, 44), tp = tipper(svg);
+  const band = (W - f.L - f.R) / by.length, bw = Math.min(46, band * .62);
+  by.forEach((o, i) => {
+    const cx = f.L + band * i + band / 2, x = cx - bw / 2, active = inPeriod(o.m);
+    let acc = 0; const segs = chs.filter(c => o[c] > 0);
+    segs.forEach((c, j) => {
+      const y0 = f.y(acc + o[c]), y1 = f.y(acc), h = Math.max(0, y1 - y0 - (j ? 1.5 : 0));
+      const isTop = j === segs.length - 1;
+      if (isTop) f.el("path", { d: topRounded(x, y0, bw, h, 4), fill: COLOR[c], class: "bar", opacity: active ? 1 : .32 });
+      else f.el("rect", { x, y: y0, width: bw, height: h, fill: COLOR[c], class: "bar", opacity: active ? 1 : .32 });
+      acc += o[c];
+    });
+    f.el("text", { x: cx, y: f.y(o.total) - 6, "text-anchor": "middle", class: "tot", opacity: active ? 1 : .5 }, fmtN(o.total));
+    f.el("text", { x: cx, y: H - f.B + 17, "text-anchor": "middle", class: "mlbl" }, mShort(o.m));
+    const hit = f.el("rect", { x: f.L + band * i, y: f.T, width: band, height: H - f.T - f.B, class: "hit" });
+    const html = `<b>${mLong(o.m)}</b>` + chs.slice().reverse().filter(c => o[c] > 0).map(c => `<div class="row"><span><i class="sw" style="background:${COLOR[c]}"></i>${c}</span><span>${fmtN(o[c])}</span></div>`).join("") + `<div class="row sum"><span>Total</span><span>${fmtN(o.total)}</span></div>`;
+    const show = () => tp.show(html, cx + bw / 2, f.T, W);
+    hit.addEventListener("mouseenter", show); hit.addEventListener("click", () => { period = o.m; document.getElementById("period").value = o.m; store.set("cap-period", o.m); render(); });
+    hit.addEventListener("mouseleave", tp.hide);
+  });
+  document.getElementById("leadLegend").innerHTML = chs.map(c => `<span><i class="sw" style="background:${COLOR[c]}"></i>${c}</span>`).join("");
+  document.getElementById("leadNote").textContent = period === "ytd" ? "Click a month to focus it" : "Showing " + mLong(period) + " · pick Year to date to reset";
+}
+
+function renderPaidChart() {
+  const svg = document.getElementById("paidChart"), W = 480, H = 300, tp = tipper(svg);
+  const paid = paidSel();
+  const by = D.months.map(m => { const rs = D.rows.filter(r => r.m === m && paid.includes(r.ch)); const s = sum(rs); const ua = unattr(m); return { m, spend: s.spend + ua, rev: s.closedRevenue, leads: s.leads, ua }; });
+  const { max, step } = niceMax(Math.max(1, ...by.map(o => Math.max(o.spend, o.rev))) * 1.04);
+  const f = frame(svg, W, H, max, step, fmtK, 50);
+  const band = (W - f.L - f.R) / by.length, bw = Math.min(16, band * .32), gap = 2;
+  by.forEach((o, i) => {
+    const cx = f.L + band * i + band / 2, active = inPeriod(o.m), op = active ? 1 : .32;
+    const base = f.y(0), ys = f.y(o.spend), yr = f.y(o.rev);
+    if (o.spend > 0) f.el("path", { d: topRounded(cx - gap / 2 - bw, ys, bw, base - ys, 3), fill: "var(--spend)", opacity: op });
+    if (o.rev > 0) f.el("path", { d: topRounded(cx + gap / 2, yr, bw, base - yr, 3), fill: "var(--rev)", opacity: op });
+    f.el("text", { x: cx, y: H - f.B + 17, "text-anchor": "middle", class: "mlbl" }, mShort(o.m));
+    const hit = f.el("rect", { x: f.L + band * i, y: f.T, width: band, height: H - f.T - f.B, class: "hit" });
+    const roas = o.spend ? (o.rev / o.spend).toFixed(2) + "x" : "–";
+    const html = `<b>${mLong(o.m)}</b><div class="row"><span><i class="sw" style="background:var(--spend)"></i>Ad spend</span><span>${fmt$(o.spend)}</span></div>` +
+      (o.ua ? `<div class="row"><span>&nbsp;&nbsp;incl. unattributed</span><span>${fmt$(o.ua)}</span></div>` : "") +
+      `<div class="row"><span><i class="sw" style="background:var(--rev)"></i>Closed revenue</span><span>${fmt$(o.rev)}</span></div><div class="row"><span>Paid leads</span><span>${fmtN(o.leads)}</span></div><div class="row sum"><span>ROAS</span><span>${roas}</span></div>`;
+    hit.addEventListener("mouseenter", () => tp.show(html, cx + bw, f.T, W)); hit.addEventListener("mouseleave", tp.hide);
+  });
+  document.getElementById("paidNote").textContent = paid.length ? "Includes: " + paid.join(", ") + (paid.includes("Google Ads") ? " and unattributed ad spend" : "") + "." : "Select Google Ads, Local Services Ads or Facebook Ads to see paid media.";
+}
+
+function roasCell(rev, spend) {
+  if (!spend) return `<span class="dim">–</span>`;
+  const v = rev / spend; return `<span class="${v >= 1 ? "roas-good" : "roas-bad"}">${v.toFixed(2)}x</span>`;
+}
+
+function renderChannels() {
+  const rows = D.rows.filter(r => inPeriod(r.m));
+  const tot = sum(rows.filter(r => sel.has(r.ch)));
+  const ua = D.months.filter(inPeriod).reduce((a, m) => a + unattr(m), 0);
+  let out = "";
+  D.channels.filter(c => sel.has(c)).map(c => ({ c, s: sum(rows.filter(r => r.ch === c)) })).sort((a, b) => b.s.leads - a.s.leads).forEach(({ c, s }) => {
+    const spend = s.spend + (c === "Google Ads" ? ua : 0);
+    out += `<tr><td><span class="badge"><i class="sw" style="background:${COLOR[c]}"></i>${c}</span></td><td>${fmtN(s.leads)}</td><td>${tot.leads ? (s.leads / tot.leads * 100).toFixed(1) + "%" : "–"}</td><td>${fmtN(s.bookedCustomers)}</td><td>${fmt$(s.closedRevenue)}</td><td>${spend ? fmt$(spend) : `<span class="dim">–</span>`}</td><td>${spend && s.leads ? fmt$(spend / s.leads) : `<span class="dim">–</span>`}</td><td>${roasCell(s.closedRevenue, spend)}</td></tr>`;
+  });
+  document.getElementById("chRows").innerHTML = out;
+  const spendAll = tot.spend + ua;
+  document.getElementById("chFoot").innerHTML = `<tr><td>Total</td><td>${fmtN(tot.leads)}</td><td>100%</td><td>${fmtN(tot.bookedCustomers)}</td><td>${fmt$(tot.closedRevenue)}</td><td>${spendAll ? fmt$(spendAll) : "–"}</td><td></td><td></td></tr>`;
+  document.getElementById("chNote").textContent = (period === "ytd" ? "Year to date" : mLong(period)) + (ua ? ` · Google Ads spend includes ${fmt$(ua)} unattributed` : "");
+}
+
+function renderCampaigns() {
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const agg = {};
+  D.rows.forEach(r => { if (!inPeriod(r.m) || !sel.has(r.ch)) return;
+    const a = agg[r.c] || (agg[r.c] = { c: r.c, ch: r.ch, leads: 0, spend: 0, bookedCustomers: 0, closedRevenue: 0 });
+    a.leads += r.leads; a.spend += r.spend; a.bookedCustomers += r.bookedCustomers; a.closedRevenue += r.closedRevenue; });
+  let list = Object.values(agg).filter(a => a.leads || a.spend || a.closedRevenue).filter(a => !q || a.c.toLowerCase().includes(q) || a.ch.toLowerCase().includes(q));
+  list.forEach(a => { a.cpl = a.spend && a.leads ? a.spend / a.leads : null; a.roas = a.spend ? a.closedRevenue / a.spend : null; });
+  list.sort((a, b) => { const x = a[sortK], y = b[sortK];
+    if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1;
+    return (typeof x === "string" ? x.localeCompare(y) : x - y) * sortDir; });
+  const N = 15, shown = showAll || q ? list : list.slice(0, N);
+  document.getElementById("cRows").innerHTML = shown.map(a => `<tr><td class="name">${esc(a.c)}</td><td><span class="badge"><i class="sw" style="background:${COLOR[a.ch]}"></i>${a.ch}</span></td><td>${fmtN(a.leads)}</td><td>${fmtN(a.bookedCustomers)}</td><td>${fmt$(a.closedRevenue)}</td><td>${a.spend ? fmt$(a.spend) : `<span class="dim">–</span>`}</td><td>${a.cpl != null ? fmt$(a.cpl) : `<span class="dim">–</span>`}</td><td>${roasCell(a.closedRevenue, a.spend)}</td></tr>`).join("")
+    || `<tr><td colspan="8" class="dim">No campaigns match “${esc(q)}”.</td></tr>`;
+  const btn = document.getElementById("more");
+  btn.hidden = !!q || list.length <= N;
+  btn.textContent = showAll ? "Show top 15" : `Show all ${list.length} campaigns`;
+}
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+</script>
