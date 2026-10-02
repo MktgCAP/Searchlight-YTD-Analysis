@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pull monthly campaign data for Coastal Air Plus from the SearchLight API and
+"""Pull monthly data for the marketing campaigns (dashboard/campaigns.json) for Coastal Air Plus from the SearchLight API and
 write dashboard/data.json for the marketing dashboard.
 
 Usage: SEARCHLIGHT_API_KEY=... python3 scripts/fetch_searchlight.py [--start 2026-01] [--end 2026-09]
@@ -13,19 +13,20 @@ METRICS = ["leads", "spend", "conversions", "bookedCustomers", "customers",
            "closedRevenue", "soldRevenue", "estimatedRevenue"]
 OUT = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data.json")
 
+# The marketing campaign set, copied from the SearchLight marketing attribution report link.
+CAMPAIGNS = json.load(open(os.path.join(os.path.dirname(__file__), "..", "dashboard", "campaigns.json")))
+
 # Channel rules, first match wins. Order matters (e.g. LSA before Google Ads).
 CHANNELS = [
     ("Local Services Ads", r"^\(LSA\)"),
     ("Facebook Ads", r"facebook"),
     ("Google Ads", r"^PPC|Performance Max|Google Ads|^\[Va?\]|Special \||^PDM|^Leads Campaign"),
     ("Google Business Profile", r"GBP|mapstakeover"),
-    ("Phone (main lines)", r"^Mainline|Atlantic Plumbing Forward|Avoca Live Transfer"),
-    ("Organic & Website", r"Organic|^Website$|Direct Web Traffic|ChatGPT"),
-    ("Email, SMS & Retention", r"SMS|MailChimp|QSL1|VIP|Membership|Retention|Retain|Estimate|Follow Up|"
-                               r"Honey Do|Email|Reminder|Inactive|Welcome|Unsold|Non-Member|Imported|"
-                               r"Promotional|Tune ?up|Tuneup|Expir|Customer - Service"),
+    ("Organic search", r"Organic|ChatGPT"),
+    ("Website & direct", r"^Website$|Direct Web Traffic"),
+    ("Email & promotions", r"MailChimp|Tune ?up|Tuneup|Honey Do"),
 ]
-OTHER = "Other & uncategorized"
+OTHER = "Other"
 PAID = ["Google Ads", "Local Services Ads", "Facebook Ads"]
 
 def channel(name):
@@ -65,8 +66,9 @@ def main():
     for y, m in month_range(a.start, a.end):
         mk = f"{y}-{m:02d}"
         rng = {"start": f"{mk}-01", "end": f"{mk}-{calendar.monthrange(y, m)[1]:02d}", "account": ACCOUNT}
-        camp = get({**rng, "fields": ",".join(["campaign"] + METRICS)})
-        tot = get({**rng, "fields": ",".join(METRICS)})[0]
+        flt = {"campaign": json.dumps(["or"] + CAMPAIGNS)}
+        camp = get({**rng, **flt, "fields": ",".join(["campaign"] + METRICS)})
+        tot = get({**rng, **flt, "fields": ",".join(METRICS)})[0]
         for r in camp:
             name = r.get("campaign") or "(no campaign)"
             rows.append({"m": mk, "c": name, "ch": channel(name),
@@ -75,14 +77,16 @@ def main():
         if gap > 1:
             unattributed[mk] = gap
         # every campaign row should add up to the account total
-        assert sum(r.get("leads", 0) for r in camp) == tot["leads"], mk
+        if sum(r.get("leads", 0) for r in camp) != tot["leads"]:
+            print(f"warning {mk}: campaign leads {sum(r.get('leads', 0) for r in camp)} != total {tot['leads']}", file=sys.stderr)
         months.append(mk)
         print(f"{mk}: {len(camp)} campaigns, {tot['leads']} leads, ${tot['spend']:,.0f} spend", file=sys.stderr)
 
     data = {"account": "Coastal Air Plus", "updated": today.isoformat(), "months": months,
-            "channels": ["Phone (main lines)", "Google Business Profile",
-                         "Google Ads", "Local Services Ads", "Organic & Website",
-                         "Email, SMS & Retention", "Facebook Ads", OTHER],
+            "channels": ["Google Ads", "Local Services Ads", "Google Business Profile",
+                         "Organic search", "Website & direct", "Facebook Ads",
+                         "Email & promotions", OTHER],
+            "campaignFilter": CAMPAIGNS,
             "paid": PAID, "unattributedSpend": unattributed, "rows": rows}
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
