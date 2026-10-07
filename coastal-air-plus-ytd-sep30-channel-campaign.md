@@ -135,6 +135,76 @@ Sorted by closed revenue within each channel. Campaigns with zero leads, jobs an
 | Uncategorized | 3 | 1 | $0.00 |
 | ChatGPT Referral | 1 | 0 | $0.00 |
 
+## All Campaigns Ranked by Closed Revenue
+
+Every campaign with any spend, leads, booked jobs or revenue, across all channels. The same campaign name can appear under more than one channel (e.g. *Direct Web Traffic*, *Website*); each is its own row.
+
+| # | Campaign | Channel | Spend | Unique Leads | Booked Jobs | Closed Revenue | ROAS |
+|---|---|---|---|---|---|---|---|
+| 1 | Charleston GBP \| Search | Organic | — | 707 | 74 | $132,486.36 | — |
+| 2 | Direct Web Traffic | Direct | — | 112 | 15 | $122,269.95 | — |
+| 3 | Website | Other | — | 183 | 67 | $105,281.93 | — |
+| 4 | Myrtle Beach GBP \| Search | Organic | — | 297 | 71 | $90,343.31 | — |
+| 5 | (LSA) Coastal Air Plus (HVAC) / David Long | Advertising | $28,092.50 | 372 | 138 | $88,245.44 | 3.14x |
+| 6 | Google Organic | Organic | — | 113 | 42 | $71,095.84 | — |
+| 7 | (LSA) Coastal Air Plus (Plumbing) / David Long | Advertising | $5,864.16 | 131 | 55 | $66,122.81 | 11.28x |
+| 8 | PPC_Brand_Core_Zip-Code | Advertising | $3,089.87 | 150 | 64 | $54,782.64 | 17.73x |
+| 9 | *(no campaign)* | Organic | — | 59 | 30 | $54,290.77 | — |
+| 10 | PPC_Brand_Core_Myrtle-Beach | Advertising | $3,946.10 | 73 | 48 | $41,969.31 | 10.64x |
+| 11 | PPC_NB_Competitor-Carolina-Cool_Zip-Code | Advertising | $4,322.52 | 79 | 18 | $39,034.59 | 9.03x |
+| 12 | Performance Max - Remarketing | Advertising | $7,825.01 | 143 | 42 | $32,610.12 | 4.17x |
+| 13 | PPC_NB_Competitor-Carolina-Cool_Myrtle-Beach | Advertising | $12,477.02 | 137 | 25 | $25,347.88 | 2.03x |
+| 14 | Uncategorized | Other | — | 107 | 2 | $18,030.70 | — |
+| 15 | Performance Max - HVAC | Advertising | $1,841.88 | 46 | 7 | $13,392.80 | 7.27x |
+| 16 | Direct Web Traffic | Organic | — | 28 | 9 | $12,298.51 | — |
+| 17 | PPC_NB_HVAC_Zip-Code | Advertising | $8,981.37 | 65 | 19 | $9,979.93 | 1.11x |
+| 18 | July 2026 Special \| $99 New System | Advertising | $4,705.42 | 21 | 4 | $9,870.00 | 2.10x |
+| 19 | (LSA) Coastal Refrigeration Services Inc. (HVAC) / David Long | Advertising | — | 0 | 0 | $9,262.00 | — |
+| 20 | PPC_NB_HVAC_Myrtle-Beach | Advertising | $17,183.50 | 97 | 27 | $7,727.47 | 0.45x |
+| 21 | PPC_NB_Plumbing_Zip-Code | Advertising | $7,281.46 | 40 | 11 | $6,648.42 | 0.91x |
+| 22 | Honey Do List Plumbing Campaign | Other | — | 35 | 16 | $5,291.71 | — |
+| 23 | PPC_NB_Competitor_Zip-Code | Advertising | $9,866.38 | 149 | 19 | $5,129.14 | 0.52x |
+| 24 | (LSA) Coastal Refrigeration Services Inc. (Plumbing) / David Long | Advertising | $380.37 | 13 | 7 | $4,811.71 | 12.65x |
+| 25 | PPC_NB_Plumbing_Myrtle-Beach | Advertising | $17,661.55 | 39 | 12 | $4,798.59 | 0.27x |
+| 26 | Website | Organic | — | 2 | 2 | $3,945.17 | — |
+| 27 | *(no campaign)* | Other | — | 60 | 9 | $3,384.60 | — |
+| 28 | PPC HVAC | Advertising | — | 174 | 7 | $2,908.84 | — |
+| 29 | PPC_NB_Competitor_Myrtle-Beach | Advertising | $6,667.32 | 48 | 13 | $2,732.46 | 0.41x |
+| 30 | [Va] [Search] \| Brand \| mCPC | Advertising | — | 5 | 6 | $2,366.80 | — |
+| 31 | Bing Organic | Organic | — | 26 | 7 | $2,351.71 | — |
+| 32 | Facebooks Ads | Advertising | — | 31 | 11 | $2,237.40 | — |
+| 33 | [V] [PMAX] \| HVAC - Cooling \| tCPA $50 > $45 | Advertising | — | 0 | 1 | $1,799.10 | — |
+| 34 | [V] [Search] \| Brand \| mCPC | Advertising | — | 4 | 6 | $1,474.24 | — |
+| 35 | PPC Plumbing | Advertising | — | 19 | 8 | $1,348.57 | — |
+| 36 | Direct Mail | Direct Marketing | — | 11 | 6 | $1,177.06 | — |
+| 37 | Avoca Live Transfer | Other | — | 13 | 4 | $909.99 | — |
+| 38 | PPC Google Brand | Advertising | — | 5 | 4 | $789.88 | — |
+| 39 | Spring HVAC Tuneup $79 | Other | — | 11 | 1 | $623.92 | — |
+| 40 | mapstakeover | Organic | — | 22 | 4 | $544.00 | — |
+| 41 | Google Ads Pending Validation | Advertising | — | 15 | 6 | $403.91 | — |
+| 42 | Yahoo Organic | Organic | — | 10 | 2 | $374.60 | — |
+| 43 | Aug 2026 Special \| $100 Off Plumbing | Advertising | $431.02 | 3 | 1 | $319.00 | 0.74x |
+| 44 | Direct Mail | Organic | — | 3 | 3 | $300.00 | — |
+| 45 | [V] [PMAX] \| US \| Heating \| tCPA $50 | Advertising | — | 1 | 2 | $258.59 | — |
+| 46 | August 2026 Special \| $100 Off HVAC Repair - Copy | Advertising | $3,871.48 | 19 | 2 | $0.00 | 0.00x |
+| 47 | DuckDuckGo Organic | Organic | — | 10 | 2 | $0.00 | — |
+| 48 | *(no campaign)* | Artificial Intelligence | — | 4 | 2 | $0.00 | — |
+| 49 | Uncategorized | Organic | — | 10 | 1 | $0.00 | — |
+| 50 | Uncategorized | Artificial Intelligence | — | 3 | 1 | $0.00 | — |
+| 51 | Promotional Maintenance MailChimp | Other | — | 157 | 0 | $0.00 | — |
+| 52 | July - Sept 2026 Special \| $99 New System | Advertising | $2,480.72 | 8 | 0 | $0.00 | 0.00x |
+| 53 | Trane TCS Leads | Other | — | 5 | 0 | $0.00 | — |
+| 54 | $99 Winter Tuneup Promo - Unbooked Customers Over 3 years | Other | — | 5 | 0 | $0.00 | — |
+| 55 | Leads Campaign June Offers | Advertising | $2,081.74 | 5 | 0 | $0.00 | 0.00x |
+| 56 | PDM -  Sept Plumbing Offer | Advertising | $828.25 | 5 | 0 | $0.00 | 0.00x |
+| 57 | test DM | Other | — | 4 | 0 | $0.00 | — |
+| 58 | $99 Winter Tuneup Promo Charleston | Other | — | 3 | 0 | $0.00 | — |
+| 59 | December 2024 $99 Tune Up Promotional Offer | Other | — | 3 | 0 | $0.00 | — |
+| 60 | $99 Winter Tuneup Promo | Other | — | 2 | 0 | $0.00 | — |
+| 61 | [Va] [Search] \| HVAC \| mCPC > tCPA $50 > $40 > $61 | Advertising | — | 1 | 0 | $0.00 | — |
+| 62 | thebluebook | Organic | — | 1 | 0 | $0.00 | — |
+| 63 | ChatGPT Referral | Artificial Intelligence | — | 1 | 0 | $0.00 | — |
+
 ## Takeaways
 
 - **Advertising** is 49% of unique leads and 41% of closed revenue on $159K spend (2.74x ROAS). **Organic**
