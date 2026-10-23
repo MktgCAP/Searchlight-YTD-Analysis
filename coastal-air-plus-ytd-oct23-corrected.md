@@ -1,5 +1,10 @@
 # Coastal Air Plus — YTD Performance, Jan 1 – Oct 23, 2026 (corrected method)
 
+> **Update:** Searchlight's own performance-by report for Jan 1 – Oct 23 shows **$841,452** closed revenue.
+> Use that figure. The $798,678 below stitches two windows together (Jan–Sep + Oct 1–23) and misses
+> October jobs from customers whose lead came earlier in the year. Channel and campaign splits below are
+> approximate until a Jan 1 – Oct 23 campaign-level export replaces them.
+
 Same campaign filter as the performance-by report: all campaigns except the 45 retention, membership,
 estimate follow-up, SMS reminder, welcome and Mainline campaigns.
 
