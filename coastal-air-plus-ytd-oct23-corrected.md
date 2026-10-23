@@ -1,9 +1,20 @@
 # Coastal Air Plus — YTD Performance, Jan 1 – Oct 23, 2026 (corrected method)
 
-> **Update:** Searchlight's own performance-by report for Jan 1 – Oct 23 shows **$841,452** closed revenue.
-> Use that figure. The $798,678 below stitches two windows together (Jan–Sep + Oct 1–23) and misses
-> October jobs from customers whose lead came earlier in the year. Channel and campaign splits below are
-> approximate until a Jan 1 – Oct 23 campaign-level export replaces them.
+> **Update (Searchlight export, Jan 1 – Oct 23):** these are Searchlight's own single-window numbers and
+> replace the stitched estimate further down.
+>
+> | Channel | Spend | Conversions | Unique leads | Closed revenue | Share | ROAS |
+> |---|---|---|---|---|---|---|
+> | Advertising | $173,872 | 2,299 | 1,820 | $348,694 | 41.4% | 2.01x |
+> | Organic | — | 1,602 | 1,135 | $351,993 | 41.8% | — |
+> | Other | — | 894 | 530 | $122,599 | 14.6% | — |
+> | Direct | — | 192 | 111 | $16,989 | 2.0% | — |
+> | Direct Marketing | — | 10 | 9 | $1,177 | 0.1% | — |
+> | Artificial Intelligence | — | 10 | 8 | $0 | 0.0% | — |
+> | **Total** | **$173,872** | **5,007** | **3,613** | **$841,452** | **100%** | **4.84x** |
+>
+> Brand-assisted revenue (main line first, then marketing; estimate, not in Searchlight): ≈ $225,000.
+> Marketing-influenced total ≈ $1,066,000.
 
 Same campaign filter as the performance-by report: all campaigns except the 45 retention, membership,
 estimate follow-up, SMS reminder, welcome and Mainline campaigns.
